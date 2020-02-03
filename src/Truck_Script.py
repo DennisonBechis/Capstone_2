@@ -74,11 +74,8 @@ if __name__ == "__main__":
     df = main(df)
     df = df.sort_values(by='total_seconds', ascending=True)
 
-    print(df.info())
     grouped_by_seconds = df.groupby('total_seconds').agg({'weight_of_orders':'mean'}).reset_index()
     df = df[df['Night']== 1]
-    print(df)
-
 
     # fig = plt.figure(figsize=(7,7))
     # ax = fig.add_subplot(1,1,1)
