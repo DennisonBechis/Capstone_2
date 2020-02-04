@@ -2,9 +2,16 @@ import pandas as pd
 import numpy as np
 import datetime
 from matplotlib import pyplot as plt
+from weather_data import *
 
 
-df = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/route_stops.csv')
+df = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/training_dataset.csv')
+
+def assign_index_values(rows):
+
+    time_range = 1000
+
+    return rows // time_range
 
 def change_column_names(df):
 
@@ -33,6 +40,9 @@ def add_date_attributes(df):
 
     df['total_seconds'] = df.apply(lambda x: x['left_time'].seconds, axis=1)
     df['total_days'] = df.apply(lambda x: x['left_time'].days, axis=1)
+    df['months'] = df.apply(lambda x: x['arrival_time'].month, axis = 1)
+    df['days'] = df.apply(lambda x: x['arrival_time'].dayofweek, axis = 1)
+    df['DATE'] = df.apply(lambda x: x['arrival_time'].date(), axis=1 )
 
     return df
 
@@ -58,28 +68,47 @@ def time_of_day(df):
 
     return df
 
+def group_by_1000_seconds(df):
+
+    df['grouped_seconds'] = df.apply(lambda row: assign_index_values(row[11]), axis=1)
+
+    return df
+
+def one_hot_encode_driver(df):
+
+    """
+    Dataframe   : pandas dataframe
+    column_list : columns of dataframe to one hot encode
+    """
+
+    dummy = pd.get_dummies(df['address_id'])
+    df = pd.concat([df, dummy], axis = 1)
+    df.drop(['address_id'], inplace=True, axis=1)
+
+    return df
+
 def main(df):
 
     df = change_column_names(df)
     df = change_to_datetime64(df)
     df = add_date_attributes(df)
-    df = add_limits(df, 240, 30000)
+    df = add_limits(df, 240, 11000)
     df = time_of_day(df)
+    df = group_by_1000_seconds(df)
+    # df = one_hot_encode_driver(df)
+    df['total_minutes'] = df.apply(lambda x: x['total_seconds']//60, axis = 1)
 
     return df
 
-
 if __name__ == "__main__":
-
     df = main(df)
-    df = df.sort_values(by='total_seconds', ascending=True)
+    print(df.info())
 
-    grouped_by_seconds = df.groupby('total_seconds').agg({'weight_of_orders':'mean'}).reset_index()
-    df = df[df['Night']== 1]
-
+    # df = df.sort_values(by='total_seconds', ascending=True)
+    # grouped_by_seconds = df.groupby('total_seconds').agg({'weight_of_orders':'mean'}).reset_index()
+    #
     # fig = plt.figure(figsize=(7,7))
     # ax = fig.add_subplot(1,1,1)
     # ax.plot(grouped_by_seconds['total_seconds'].to_numpy(), grouped_by_seconds['weight_of_orders'].to_numpy())
     # plt.show()
-    # df['total_seconds'].hist(bins = 100)
     # plt.show()
