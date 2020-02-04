@@ -19,15 +19,15 @@ def scatter_plot(ax, df, x_name, y_name, x_label, y_label, title):
 
 
 if __name__=='__main__':
+
     df = main(df)
+    df['total_minutes'].hist(bins = 50)
+    plt.show()
 
-    df[df['total_seconds'] < 11000]
-    df['total_seconds'].hist(bins = 100)
-
-    grouped_by_seconds = df.groupby('grouped_seconds').agg({'weight_of_orders':'mean'}).reset_index()
+    grouped_by_seconds = df.groupby('total_minutes').agg({'weight_of_orders':'mean'}).reset_index()
     fig = plt.figure(figsize=(7,7))
     ax = fig.add_subplot(2,2,1)
     ax1 = fig.add_subplot(2,2,2)
-    line_plot(ax, grouped_by_seconds, 'grouped_seconds', 'weight_of_orders', 'Seconds', 'Weight (lbs)', 'Stop duration by weight')
-    scatter_plot(ax1, grouped_by_seconds, 'grouped_seconds', 'weight_of_orders', 'Seconds', 'Weight (lbs)', 'Scatter plot')
+    line_plot(ax, grouped_by_seconds, 'total_minutes', 'weight_of_orders', 'Seconds', 'Weight (lbs)', 'Stop duration by weight')
+    scatter_plot(ax1, grouped_by_seconds, 'total_minutes', 'weight_of_orders', 'Seconds', 'Weight (lbs)', 'Scatter plot')
     plt.show()

@@ -3,15 +3,16 @@ import numpy as np
 import datetime
 from matplotlib import pyplot as plt
 from weather_data import *
+from sklearn.model_selection import train_test_split
 
-
-df = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/training_dataset.csv')
+df = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/route_stops_more.csv')
 
 def assign_index_values(rows):
 
-    time_range = 1000
+    minutes = rows // 60
+    hours = minutes // 60
 
-    return rows // time_range
+    return hours
 
 def change_column_names(df):
 
@@ -68,9 +69,9 @@ def time_of_day(df):
 
     return df
 
-def group_by_1000_seconds(df):
+def group_by_1_hour(df):
 
-    df['grouped_seconds'] = df.apply(lambda row: assign_index_values(row[11]), axis=1)
+    df['grouped_hour'] = df.apply(lambda row: assign_index_values(row[17]), axis=1)
 
     return df
 
@@ -92,23 +93,14 @@ def main(df):
     df = change_column_names(df)
     df = change_to_datetime64(df)
     df = add_date_attributes(df)
-    df = add_limits(df, 240, 11000)
+    df = add_limits(df, 300, 18900)
     df = time_of_day(df)
-    df = group_by_1000_seconds(df)
-    # df = one_hot_encode_driver(df)
+    df = group_by_1_hour(df)
+    df = one_hot_encode_driver(df)
     df['total_minutes'] = df.apply(lambda x: x['total_seconds']//60, axis = 1)
+    df['total_minutes'] = df.apply(lambda x: np.log(x['total_minutes']), axis = 1)
 
     return df
 
 if __name__ == "__main__":
     df = main(df)
-    print(df.info())
-
-    # df = df.sort_values(by='total_seconds', ascending=True)
-    # grouped_by_seconds = df.groupby('total_seconds').agg({'weight_of_orders':'mean'}).reset_index()
-    #
-    # fig = plt.figure(figsize=(7,7))
-    # ax = fig.add_subplot(1,1,1)
-    # ax.plot(grouped_by_seconds['total_seconds'].to_numpy(), grouped_by_seconds['weight_of_orders'].to_numpy())
-    # plt.show()
-    # plt.show()

@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 from truck_script import *
 
-df_weather = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/houston_weather.csv')
-df = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/training_dataset.csv')
+# df_weather = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/houston_weather.csv')
+# df = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/Train_dataset1.csv')
 
 def grouping_by_date_prec(df):
 
