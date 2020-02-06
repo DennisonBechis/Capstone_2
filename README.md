@@ -40,7 +40,11 @@ Driver_id - driver ids are recording wrong.
 
 ![First_look](images/StopTime.png)
 
+The first thing I wanted to go was look at the distribution of my times. From past knowledge I was informed that many of the stops past 2 hours were invalid. Most of the stop times are distributed around 30 minutes with a right skew.
+
 ![weight_vs_time](images/Weight_Time.png)
+
+Next, one big assumption I held was that total weight of each delivery could help in  predicting unloading times. Above shows that a trend can be seen. As time get larger the variance also seems to increase. Even after grouping by larger intervals, the variance still became more defined.
 
 
 
