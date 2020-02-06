@@ -6,17 +6,17 @@
 1. [Introduction](#Introduction)
 2. [Data](#Data)
 3. [EDA](#EDA)
-4. [Analysis?](#Analysis)
+4. [Analysis](#Analysis)
 5. [Additional Questions](#Conclusions)
 
 ## Introduction
 
-The trucking industry is a key player in the economy for the United States. Most industries that produce good rely on trucking to deliver their products to the consumer. Over the past few years, there has been a decline in truck drivers. As a result trucking rates have increased. One particular way to mitigate the effects of rising Truck prices can be found in providing better trucking logisitcs.
-This cases study will revlove around a houston steel company to determine if a model can be used to predict how long a truck might be at a single location unloading product. If a model can accurately predict how long the unloading duration is, more deliveries can be made in a single day saving this company thousands of dollars.
+The trucking industry is a key player in the economy for the United States. Most industries that produce good rely on trucking to deliver their products to the consumer. Over the past few years, there has been a decline in truck drivers. As a result trucking rates have increased. One particular way to mitigate the effects of rising Truck prices can be found in providing better trucking logistics.
+This cases study revolves around a trucking logistics to determine if a model can be used to predict how long a truck might be at a single location unloading product. If a model can accurately predict how long the unloading duration is, more deliveries can be made in a single day saving this company thousands of dollars.
 
 ## Data
 
-Data was obtained from a Transview logistics. They provide trucking logisitic services to several steel companys in Houston Texas. Shipments typically are valued in millions of dollars. Large portions of this data provided inaccurate data. This data was collected from an app provided to the drivers.
+Data was obtained from a Transview Logistics. They provide trucking logistic services to several steel company's in Houston Texas. Shipments typically are valued in millions of dollars. Large portions of this data provided inaccurate data. This data was collected from an app provided to the drivers.
 
 | Column Names     | Description   |
 | ---------------- | ------------- |
@@ -65,8 +65,16 @@ Due to the low performing Linear Regressions, looking at different models to det
 
 The above PCA plot with two principal components show little difference in the clusters between high and low stop times. When examining the principal components vs explained variance plot, almost all my PC's were required to explain 90% variance.
 
+Heading down further, looking into supervised learning using a RandomForest seemed appropriate for finding some sort of signal within my data.
+
 ![Partial_dependence_plot](images/Partial_Dependence.png)
 
-
+| Model                 | RMSE-train    | RMSE-test   |
+| ----------------      | ------------- | ----------- |
+| LinearRegression      | 28.32         | 28.71       |
+| RandomForestRegressor | 24.85         | 25.35       |
+| GradientBoosting      | 22.48         | 25.22       |
 
 ## Conclusions
+
+Being able to predict the unloading time for each truck is important for optimizing route times. Accounting for truck times can help companies predict costs much more efficiently. It also provides Tansview Logistics with a more accurate user interface depicting where each truck currently is.

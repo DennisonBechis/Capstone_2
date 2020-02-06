@@ -83,15 +83,20 @@ if __name__ == "__main__":
     print(scaled_data)
     new_df = pd.DataFrame(scaled_data, columns = names)
     print(new_df)
-    X_train, X_test, y_train, y_test = train_test_split(new_df, y_data_2.to_numpy(), test_size = 0.20)
+    X_train, X_test, y_train, y_test = train_test_split(df, y_data_2.to_numpy(), test_size = 0.20)
 
     run_ols_model(y_train, X_train)
     make_linear_regression(X_train, X_test, y_train, y_test)
 
-    # model = GradientBoostingRegressor(n_estimators=100, max_depth = 6, min_samples_split=5)
-    # model.fit(X_train, y_train)
-    # print(model.score(X_train, y_train))
-    # print(model.score(X_test, y_test))
+    model = GradientBoostingRegressor(n_estimators=100, max_depth = 5, min_samples_split=7)
+    model.fit(X_train, y_train)
+    predict = model.predict(X_train)
+    predict2 = model.predict(X_test)
+    values = np.sqrt(mean_squared_error(predict, y_train))
+    values2 = np.sqrt(mean_squared_error(predict2, y_test))
+
+    print(values, values2)
+
     #
     # predict, predict_2 = random_Forest_regression(X_train, X_test, y_train, y_test)
     # print(np.sqrt(mean_squared_error(predict, y_train)))
@@ -100,10 +105,12 @@ if __name__ == "__main__":
     # print(predict)
     # print(y_train)
 
-    # clf = linear_model.Lasso(alpha=0.1)
-    # clf.fit(X_train, y_train )
-    # print(clf.score(X_train, y_train))
-    # print(clf.score(X_test, y_test))
+    clf = linear_model.Lasso(alpha=0.4)
+    clf.fit(X_train, y_train )
+    predict_3 = clf.predict(X_train)
+    values = np.sqrt(mean_squared_error(predict_3, y_train))
+    print(values)
+
     #
     # ridge = linear_model.Ridge(alpha=100000.0)
     # ridge.fit(X_train, y_train)
