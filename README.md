@@ -40,6 +40,8 @@ Driver_id - driver ids are recording wrong.
 
 ![First_look](images/StopTime.png)
 
+![weight_vs_time](images/)
+
 
 
 ## Analysis
