@@ -1,7 +1,7 @@
   <h1 align="center">
-	Keep On Trucking 
+	Keep On Trucking
   </h1>
-  
+
  ## Table of Contents
 1. [Introduction](#Introduction)
 2. [Data](#Data)
@@ -11,7 +11,7 @@
 
 ## Introduction
 
-The trucking industry is a key player in the economy for the United States. Most industries that produce good rely on trucking to deliver their products to the consumer. Over the past few years, there has been a decline in truck drivers. As a result trucking rates have increased. One particular way to mitigate the effects of rising Truck prices can be found in providing better trucking logisitcs. 
+The trucking industry is a key player in the economy for the United States. Most industries that produce good rely on trucking to deliver their products to the consumer. Over the past few years, there has been a decline in truck drivers. As a result trucking rates have increased. One particular way to mitigate the effects of rising Truck prices can be found in providing better trucking logisitcs.
 This cases study will revlove around a houston steel company to determine if a model can be used to predict how long a truck might be at a single location unloading product. If a model can accurately predict how long the unloading duration is, more deliveries can be made in a single day saving this company thousands of dollars.
 
 ## Data
@@ -19,10 +19,10 @@ This cases study will revlove around a houston steel company to determine if a m
 Data was obtained from a Transview logistics. They provide trucking logisitic services to several steel companys in Houston Texas. Shipments typically are valued in millions of dollars. Large portions of this data provided inaccurate data. This data was collected from an app provided to the drivers.
 
 | Column Names     | Description   |
-| ---------------- | ------------- | 
+| ---------------- | ------------- |
 | ADDRESS_ID       | Unique int    |              
 | DRIVER_ID        | Unique int    |
-| ARRIVAL_TIME     | Timestamp     | 
+| ARRIVAL_TIME     | Timestamp     |
 | DEPARTURE_TIME   | Timestamp     |
 | TOTAL_WEIGHT     | Integer       |
 | NUMBER_OF_PIECES | Integer       |
@@ -48,4 +48,13 @@ One big assumption I held was that total weight of each delivery could help in p
 
 ## Analysis
 
-## Conclusions 
+The model that I will be using to predict the stop time of each truck had to be continuous. The first two models performed on my data were OLS and LinearRegression.
+
+![OLS_Model](images/OLS_model.png)
+
+
+
+![Partial_dependence_plot](images/Partial_Dependence.png)
+
+
+## Conclusions

@@ -42,22 +42,22 @@ def assign_index_values(rows):
 def assign_rain_categories(rows):
 
     if rows <= 0.01:
-        return 'clear'
+        return 'clear sky'
     elif rows <= 0.5:
-        return 'low'
+        return 'low rain'
     elif rows >= 0.5 and rows < 1.7:
-        return 'moderate'
+        return 'moderate rain'
     elif rows >= 1.7:
-        return 'high'
+        return 'high rain'
 
 def assign_address_categories(rows):
 
     if rows < 30:
-        return 'quick'
+        return 'quick unloading'
     elif rows >= 30 and rows < 60:
-        return 'average'
+        return 'average unloading'
     elif rows >= 60:
-        return 'slow'
+        return 'slow unloading'
 
     return half_hours
 
@@ -88,7 +88,7 @@ def add_date_attributes(df):
 
     df['total_seconds'] = df.apply(lambda x: x['left_time'].seconds, axis=1)
     df['total_days'] = df.apply(lambda x: x['left_time'].days, axis=1)
-    df['months'] = df.apply(lambda x: x['arrival_time'].month, axis = 1)
+    df['month'] = df.apply(lambda x: x['arrival_time'].month, axis = 1)
     df['days'] = df.apply(lambda x: x['arrival_time'].dayofweek, axis = 1)
     df['DATE'] = df.apply(lambda x: x['arrival_time'].date(), axis=1 )
 

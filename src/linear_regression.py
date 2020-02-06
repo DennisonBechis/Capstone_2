@@ -15,6 +15,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.decomposition import PCA
 from sklearn.model_selection import cross_validate
 from sklearn.metrics import mean_squared_error
+from sklearn.ensemble.partial_dependence import plot_partial_dependence
 from sklearn import linear_model
 import numpy as np
 from matplotlib import cm
@@ -67,38 +68,36 @@ def random_forest_classifier(X_train, X_test, y_train, y_test):
     print(clf.score(X_train, y_train))
     print(a)
 
-
-
-
 if __name__ == "__main__":
     df, y_data, y_data_2 = make_dataframe(df, df_weather)
 
-    keep = ['number_of_orders','weight_of_orders', 'quantity_of_pieces_on_orders', 'months', 'days',
+    keep = ['number_of_orders','weight_of_orders', 'quantity_of_pieces_on_orders', 'month', 'days',
             'Morning', 'Afternoon', 'rain_fall', 'unloading_speed']
 
     df = df[keep]
     df = one_hot_encode_columns(df, ['rain_fall','unloading_speed'])
+    names = df.columns
 
-    # scaler = StandardScaler()
-    # scaled_data = scaler.fit_transform(df)
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(df)
+    print(scaled_data)
+    new_df = pd.DataFrame(scaled_data, columns = names)
+    print(new_df)
+    X_train, X_test, y_train, y_test = train_test_split(new_df, y_data_2.to_numpy(), test_size = 0.20)
 
-    X_train, X_test, y_train, y_test = train_test_split(df, y_data_2.to_numpy(), test_size = 0.20)
-
-    # random_Forest_regression(X_train, X_test, y_train, y_test)
+    run_ols_model(y_train, X_train)
 
     # model = GradientBoostingRegressor(n_estimators=100, max_depth = 6, min_samples_split=5)
     # model.fit(X_train, y_train)
     # print(model.score(X_train, y_train))
     # print(model.score(X_test, y_test))
-
-    # random_forest_classifier(X_train, X_test, y_train, y_test)
-
-    predict, predict_2 = random_Forest_regression(X_train, X_test, y_train, y_test)
-    print(np.sqrt(mean_squared_error(predict, y_train)))
-    print(np.sqrt(mean_squared_error(predict_2, y_test)))
-
-    print(predict)
-    print(y_train)
+    #
+    # predict, predict_2 = random_Forest_regression(X_train, X_test, y_train, y_test)
+    # print(np.sqrt(mean_squared_error(predict, y_train)))
+    # print(np.sqrt(mean_squared_error(predict_2, y_test)))
+    #
+    # print(predict)
+    # print(y_train)
 
     # clf = linear_model.Lasso(alpha=0.1)
     # clf.fit(X_train, y_train )
@@ -109,10 +108,3 @@ if __name__ == "__main__":
     # ridge.fit(X_train, y_train)
     # print(ridge.score(X_train, y_train))
     # print(clf.score(X_test, y_test))
-    #
-    #
-    # regr = RandomForestRegressor(max_depth = 7, n_estimators = 100)
-    # cross = cross_validate(regr, X_train, y_train, cv=4)
-    #
-    # print(cross['test_score'])
-    # print(cross['train_score'])
