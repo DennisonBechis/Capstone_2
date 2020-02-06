@@ -11,7 +11,7 @@
 
 ## Introduction
 
-The trucking industry is a key player in the economy for the United States. Most industries that produce good rely on trucking to deliver their products to the consumer. Over the past few years, there has been a decline in truck drivers. As a result trucking rates have increased. One particular way to mitigate the effects of rising Truck prices can be found in providing better trucking logistics.
+The trucking industry is a key player in the economy for the United States. Most industries that produce goods rely on truckers to deliver their products to the consumer. Over the past few years, there has been a decline in truck drivers. As a result trucking rates have increased. One particular way to mitigate the effects of rising Truck prices can be found in providing better trucking logistics.
 This cases study revolves around a trucking logistics to determine if a model can be used to predict how long a truck might be at a single location unloading product. If a model can accurately predict how long the unloading duration is, more deliveries can be made in a single day saving this company thousands of dollars.
 
 ## Data
