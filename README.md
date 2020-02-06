@@ -38,7 +38,7 @@ Driver_id - driver ids are recording wrong.
 
 ## EDA
 
-![First_look](StopTime.png)
+![First_look](images/StopTime.png)
 
 
 
