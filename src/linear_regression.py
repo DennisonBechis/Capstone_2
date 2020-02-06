@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.model_selection import train_test_split
 import pandas as pd
-from truck_script import *
+from cleaning_script import *
 from sklearn.linear_model import LinearRegression
 import statsmodels.api as sm
 from sklearn.preprocessing import StandardScaler
@@ -11,26 +11,20 @@ from sklearn import preprocessing
 from statsmodels.tools import add_constant
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.decomposition import PCA
+from sklearn.model_selection import cross_validate
+from sklearn.metrics import mean_squared_error
+from sklearn import linear_model
+import numpy as np
+from matplotlib import cm
+from mpl_toolkits import mplot3d
 
-df = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/training_dataset.csv')
+df = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/route_stops_more.csv')
 df_weather = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/houston_weather.csv')
 
-def make_dataframe(df, df_weather):
-    df = main(df)
-    df_weather = grouping_by_date_prec(df_weather)
-    df_weather = weather_date_to_datetime(df_weather)
-    df = pd.merge(df, df_weather, how='left', on="DATE")
-    df = df.fillna(0)
-    drop_columns = ['arrival_time','departure_time','route_stop_id','left_time',
-                    'total_days','arrival_time_1','departure_time_1','grouped_hour',
-                    'DATE', 'unplanned', 'stop_type','arrival_driver_id','departure_driver_id',
-                    'bill_of_lading_id','stop_number','Night','total_seconds', 'total_minutes','Unnamed:_0']
-    y_data = df['grouped_hour']
-    df.drop(drop_columns, axis =1, inplace=True)
-
-    return df, y_data
-
 def make_linear_regression(X_train, X_test, y_train, y_test):
+
     model = LinearRegression()
     model.fit(X_train, y_train)
 
@@ -49,43 +43,76 @@ def make_linear_regression(X_train, X_test, y_train, y_test):
     return (error, error_2) , (score, score_2)
 
 def run_ols_model(y_train, X_train):
+
     X_train = add_constant(X_train)
     model_2 = sm.OLS(y_train, X_train)
     results = model_2.fit()
     print(results.summary())
 
-def random_Forester_regression(X_train, y_train, X_test, y_test):
+def random_Forest_regression(X_train, X_test, y_train, y_test):
 
-    regr = RandomForestRegressor(max_depth = 10, n_estimators = 100)
+    regr = RandomForestRegressor(max_depth = 6, n_estimators = 90)
     regr.fit(X_train, y_train)
-    print(regr.score(X_test, y_test))
-    print(regr.score(X_train, y_train))
+    predict = regr.predict(X_train)
+    predict_2 = regr.predict(X_test)
 
-def random_forester_classifier(X_train, y_train, X_test, y_test):
+    return predict, predict_2
 
-    clf = RandomForestClassifier(max_depth = 10, n_estimators = 100)
+def random_forest_classifier(X_train, X_test, y_train, y_test):
+
+    clf = RandomForestClassifier(max_depth = 7, n_estimators = 100)
     clf.fit(X_train, y_train)
+    a = clf.predict(X_train)
     print(clf.score(X_test, y_test))
     print(clf.score(X_train, y_train))
+    print(a)
+
+
+
 
 if __name__ == "__main__":
-    df, y_data = make_dataframe(df, df_weather)
+    df, y_data, y_data_2 = make_dataframe(df, df_weather)
 
-    print(y_data)
+    keep = ['number_of_orders','weight_of_orders', 'quantity_of_pieces_on_orders', 'months', 'days',
+            'Morning', 'Afternoon', 'rain_fall', 'unloading_speed']
 
-    scaler = StandardScaler()
-    scaler.fit(df)
-    print(scaler.mean_)
-    scaled_data = scaler.transform(df)
-    print(scaled_data)
+    df = df[keep]
+    df = one_hot_encode_columns(df, ['rain_fall','unloading_speed'])
 
+    # scaler = StandardScaler()
+    # scaled_data = scaler.fit_transform(df)
 
-    X_train, X_test, y_train, y_test = train_test_split(df, y_data.to_numpy(), test_size = 0.20)
+    X_train, X_test, y_train, y_test = train_test_split(df, y_data_2.to_numpy(), test_size = 0.20)
 
-    # make_linear_regression(X_train, X_test, y_train, y_test)
+    # random_Forest_regression(X_train, X_test, y_train, y_test)
+
+    # model = GradientBoostingRegressor(n_estimators=100, max_depth = 6, min_samples_split=5)
+    # model.fit(X_train, y_train)
+    # print(model.score(X_train, y_train))
+    # print(model.score(X_test, y_test))
+
+    # random_forest_classifier(X_train, X_test, y_train, y_test)
+
+    predict, predict_2 = random_Forest_regression(X_train, X_test, y_train, y_test)
+    print(np.sqrt(mean_squared_error(predict, y_train)))
+    print(np.sqrt(mean_squared_error(predict_2, y_test)))
+
+    print(predict)
+    print(y_train)
+
+    # clf = linear_model.Lasso(alpha=0.1)
+    # clf.fit(X_train, y_train )
+    # print(clf.score(X_train, y_train))
+    # print(clf.score(X_test, y_test))
     #
-    # run_ols_model(y_train, X_train)
+    # ridge = linear_model.Ridge(alpha=100000.0)
+    # ridge.fit(X_train, y_train)
+    # print(ridge.score(X_train, y_train))
+    # print(clf.score(X_test, y_test))
     #
-    # random_Forester_regression(X_train, y_train, X_test, y_test)
     #
-    # random_forester_classifier(X_train, y_train, X_test, y_test)
+    # regr = RandomForestRegressor(max_depth = 7, n_estimators = 100)
+    # cross = cross_validate(regr, X_train, y_train, cv=4)
+    #
+    # print(cross['test_score'])
+    # print(cross['train_score'])

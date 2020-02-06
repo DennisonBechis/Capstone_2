@@ -3,16 +3,63 @@ import numpy as np
 import datetime
 from matplotlib import pyplot as plt
 from weather_data import *
-from sklearn.model_selection import train_test_split
 
 df = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/route_stops_more.csv')
+df_weather = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/houston_weather.csv')
+
+def make_dataframe(df, df_weather):
+
+    df = main(df)
+    df_weather = grouping_by_date_prec(df_weather)
+    df_weather = weather_date_to_datetime(df_weather)
+    df = pd.merge(df, df_weather, how='left', on="DATE")
+    df = df.fillna(0)
+
+    drop_columns = ['arrival_time','departure_time','route_stop_id','left_time',
+                    'total_days','arrival_time_1','departure_time_1','DATE', 'unplanned',
+                    'stop_type', 'bill_of_lading_id','stop_number','Night','total_seconds']
+
+    y_data = df['half_hour_intervals'].reset_index()
+    y_data_2 = df['total_minutes']
+    df.drop(drop_columns, axis =1, inplace=True)
+
+    df = add_rain_fall_metrics(df)
+
+    grouped_by_address = df.groupby(['address_id']).agg({'total_minutes':'mean'}).reset_index()
+    df = pd.merge(df, grouped_by_address, how='left', on="address_id")
+
+    df = add_address_categories(df)
+
+    return df, y_data, y_data_2
 
 def assign_index_values(rows):
 
     minutes = rows // 60
-    hours = minutes // 60
+    half_hours = minutes // 30
 
-    return hours
+    return half_hours
+
+def assign_rain_categories(rows):
+
+    if rows <= 0.01:
+        return 'clear'
+    elif rows <= 0.5:
+        return 'low'
+    elif rows >= 0.5 and rows < 1.7:
+        return 'moderate'
+    elif rows >= 1.7:
+        return 'high'
+
+def assign_address_categories(rows):
+
+    if rows < 30:
+        return 'quick'
+    elif rows >= 30 and rows < 60:
+        return 'average'
+    elif rows >= 60:
+        return 'slow'
+
+    return half_hours
 
 def change_column_names(df):
 
@@ -75,32 +122,58 @@ def group_by_1_hour(df):
 
     return df
 
-def one_hot_encode_driver(df):
+def one_hot_encode_columns(df, column_list):
 
     """
     Dataframe   : pandas dataframe
     column_list : columns of dataframe to one hot encode
     """
 
-    dummy = pd.get_dummies(df['address_id'])
-    df = pd.concat([df, dummy], axis = 1)
-    df.drop(['address_id'], inplace=True, axis=1)
+    for x in column_list:
+        dummy = pd.get_dummies(df[x])
+        df = pd.concat([df, dummy], axis = 1)
+        df.drop([df[x]][0], axis = 1)
+        df.drop([x], inplace=True, axis=1)
 
     return df
+
+def add_rain_fall_metrics(df):
+
+    df['rain_fall'] = df.apply(lambda row: assign_rain_categories(row[12]), axis=1)
+
+    return df
+
+def add_address_categories(df):
+
+    df['unloading_speed'] = df.apply(lambda row: assign_address_categories(row[14]), axis = 1)
+
+    return df
+
+def add_driver_speed(df):
+
+    df['driver_speed'] = df.apply(lambda row: assign_address_categories(row[14]), axis = 1)
 
 def main(df):
 
     df = change_column_names(df)
     df = change_to_datetime64(df)
     df = add_date_attributes(df)
-    df = add_limits(df, 300, 18900)
+    df = add_limits(df, 420, 8000)
     df = time_of_day(df)
-    df = group_by_1_hour(df)
-    df = one_hot_encode_driver(df)
     df['total_minutes'] = df.apply(lambda x: x['total_seconds']//60, axis = 1)
-    df['total_minutes'] = df.apply(lambda x: np.log(x['total_minutes']), axis = 1)
+    df['half_hour_intervals'] = df.apply(lambda x: x['total_minutes']//30, axis = 1)
 
     return df
 
 if __name__ == "__main__":
-    df = main(df)
+    pass
+    # df, y_data, y_data_2 = make_dataframe(df, df_weather)
+    #
+    # keep = ['number_of_orders','weight_of_orders', 'quantity_of_pieces_on_orders', 'months', 'days',
+    #         'Morning', 'Afternoon', 'rain_fall', 'unloading_speed']
+    #
+    # df = df[keep]
+    # df = one_hot_encode_columns(df, ['rain_fall','unloading_speed'])
+    #
+    # print(df)
+    # print(df.info())
