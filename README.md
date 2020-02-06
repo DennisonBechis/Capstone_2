@@ -67,6 +67,8 @@ The above PCA plot with two principal components show little difference in the c
 
 Heading down further, looking into supervised learning using a RandomForest seemed appropriate for finding some sort of signal within my data.
 
+![Feature_importance](images/Feature_importance.png)
+
 ![Partial_dependence_plot](images/Partial_Dependence.png)
 
 | Model                 | RMSE-train    | RMSE-test   |

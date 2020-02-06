@@ -24,6 +24,7 @@ from mpl_toolkits import mplot3d
 df = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/route_stops_more.csv')
 df_weather = pd.read_csv('/Users/bechis/dsi/repo/Capstone_2/data/houston_weather.csv')
 
+
 def make_linear_regression(X_train, X_test, y_train, y_test):
 
     model = LinearRegression()
@@ -76,6 +77,19 @@ if __name__ == "__main__":
 
     df = df[keep]
     df = one_hot_encode_columns(df, ['rain_fall','unloading_speed'])
+
+    print(df)
+
+
+    labels = ['number_of_orders','weight_of_orders', 'quantity_of_pieces_on_orders', 'month', 'days',
+            'Morning', 'Afternoon', 'clear sky', 'high rain', 'low rain', 'moderate rain','average unloading',
+            'quick unloading', 'slow unloading']
+
+    labels = ['Total Weight', 'Slow Unloading', 'Individual Pieces', 'Quick Unloading', 'Number of Orders',
+                'Average Unloading', 'Month', 'Morning', 'Day', 'Low Rain', 'Afternoon', 'Clearsky', 'Moderate Rain', 'High Rain']
+
+
+
     names = df.columns
 
     scaler = StandardScaler()
@@ -94,8 +108,19 @@ if __name__ == "__main__":
     predict2 = model.predict(X_test)
     values = np.sqrt(mean_squared_error(predict, y_train))
     values2 = np.sqrt(mean_squared_error(predict2, y_test))
+    print(model.feature_importances_)
 
-    print(values, values2)
+    fig = plt.figure(figsize=(7,7))
+    ax = fig.add_subplot(1,1,1)
+
+    x_values = [x for x in range(len(model.feature_importances_))]
+
+    ax.barh(x_values, np.sort(model.feature_importances_))
+
+    ax.set_yticks(x_values)
+    ax.set_yticklabels(labels[::-1])
+
+    plt.show()
 
     #
     # predict, predict_2 = random_Forest_regression(X_train, X_test, y_train, y_test)
@@ -104,15 +129,3 @@ if __name__ == "__main__":
     #
     # print(predict)
     # print(y_train)
-
-    clf = linear_model.Lasso(alpha=0.4)
-    clf.fit(X_train, y_train )
-    predict_3 = clf.predict(X_train)
-    values = np.sqrt(mean_squared_error(predict_3, y_train))
-    print(values)
-
-    #
-    # ridge = linear_model.Ridge(alpha=100000.0)
-    # ridge.fit(X_train, y_train)
-    # print(ridge.score(X_train, y_train))
-    # print(clf.score(X_test, y_test))
