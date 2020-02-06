@@ -38,6 +38,7 @@ Driver_id - driver ids are recording wrong.
 
 ## EDA
 
+![Crimes per Year Boulder, CO](images/Crime_by_year.png)
 
 
 
