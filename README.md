@@ -1,5 +1,5 @@
   <h1 align="center">
-	Keep on trucking 
+	Keep On Trucking 
   </h1>
   
  ## Table of Contents
