@@ -31,12 +31,12 @@ def make_linear_regression(X_train, X_test, y_train, y_test):
 
     train_prediction = model.predict(X_train)
 
-    error = mean_squared_error(train_prediction, y_train)
+    error = np.sqrt(mean_squared_error(train_prediction, y_train))
     score = model.score(X_train, y_train)
 
     test_prediction = model.predict(X_test)
 
-    error_2 = mean_squared_error(test_prediction, y_test)
+    error_2 = np.sqrt(mean_squared_error(test_prediction, y_test))
     score_2 = model.score(X_test, y_test)
 
     print((error, error_2) , (score, score_2))
@@ -86,6 +86,7 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_split(new_df, y_data_2.to_numpy(), test_size = 0.20)
 
     run_ols_model(y_train, X_train)
+    make_linear_regression(X_train, X_test, y_train, y_test)
 
     # model = GradientBoostingRegressor(n_estimators=100, max_depth = 6, min_samples_split=5)
     # model.fit(X_train, y_train)

@@ -52,9 +52,21 @@ The model that I will be using to predict the stop time of each truck had to be 
 
 ![OLS_Model](images/OLS_model.png)
 
+Important Features:
+1. Total weight of materials.
+2. Number of orders places.
+3. Unloading rates for each facility.
 
+The Linear Regression models performed poorly generating a RMSE of about 28 minutes off on average.
+
+Due to the low performing Linear Regressions, looking at different models to detect signal seemed appropriate. My next step was to see if the features in this dataset had some sort of clusters. Checking PCA for with two principal components seemed like a good way to check the signal in my data.
+
+![PCA_plot](PCA.png)
+
+The above PCA plot with two principal components show little difference in the clusters between high and low stop times. When examining the principal components vs explained variance plot, almost all my PC's were required to explain 90% variance.
 
 ![Partial_dependence_plot](images/Partial_Dependence.png)
+
 
 
 ## Conclusions
