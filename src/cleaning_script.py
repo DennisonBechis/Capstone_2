@@ -167,13 +167,3 @@ def main(df):
 
 if __name__ == "__main__":
     pass
-    # df, y_data, y_data_2 = make_dataframe(df, df_weather)
-    #
-    # keep = ['number_of_orders','weight_of_orders', 'quantity_of_pieces_on_orders', 'months', 'days',
-    #         'Morning', 'Afternoon', 'rain_fall', 'unloading_speed']
-    #
-    # df = df[keep]
-    # df = one_hot_encode_columns(df, ['rain_fall','unloading_speed'])
-    #
-    # print(df)
-    # print(df.info())

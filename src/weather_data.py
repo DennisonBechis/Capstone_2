@@ -17,6 +17,3 @@ def weather_date_to_datetime(df):
     df['DATE'] = df.apply(lambda x: x['DATE'].date(), axis=1 )
 
     return df
-
-if __name__ == '__main__':
-    pass
